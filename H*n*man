@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.8
+!/usr/bin/env python3.8
 
 import sys
 import os
@@ -6,7 +6,8 @@ import time
 import random
 
 def get_word():
-    words = ['Apple','Bike','Python', 'Module', 'Variable']
+    words = ['Apple']
+    #words = ['Apple','Bike','Python', 'Module', 'Variable']
     return  random.choice(words).upper()
 
 
@@ -18,23 +19,30 @@ def vowel_count(word):
             vowelCount += 1
     print('There are '+str(vowelCount)+' vowels in the word')
 
+def find_indices(word, guess):
+    #ToDo look up enumerate 
+    #ToDo look up list comprehension 
+    return [n for n, c in enumerate(word) if c == guess]
+
 
 def logic():
     turns = 0
+    ass_lst = ['*'] * len(word)
     while turns < 10:
-        guess =input('Guess a letter:')
-        guess = guess.upper()
+        guess =input('Guess a letter:').upper() 
         turns += 1
         failed = 0
-        for guess in word:
-            if guess in word:
-                print(guess)
+        #for guess in word:
+        if guess in word:
+            print ('Letter ' +str(guess) +' is in the word')
+            for index in find_indices(word, guess):
+                ass_lst[index] = guess
+            print(ass_lst)
         else:
-            print("_")
-            failed += 0
-
-
-def main():
+            print ('Letter ' +str(guess) +' is not in the word')
+            print(ass_lst)
+            
+           def main():
     numGuesses = 0
     guesses = []
 
@@ -45,6 +53,22 @@ word = get_word()
 vowel_count(word)
 print('Start guessing')
 time.sleep(0.5)
+print('*'*len(word))
 
 logic()
+
+   # if guess not in word:
+       # turns -=1
+       # print('Letter ' +str(guess)+  ' is not in the word')
+       # print('You have '+str(turns)+ ' more guesses')
+
+   # if turns ==0:
+       # prinf check(word,guesses,guess):
+    #status = ''
+    #match = 0
+    #for letter in word:
+        #if letter in guesses:
+            #status += letter
+       # else:
+           # status += "*"t("Try again next time!")
 
