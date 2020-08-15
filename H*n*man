@@ -1,4 +1,4 @@
-!/usr/bin/env python3.8
+#!/usr/bin/env python3.8
 
 import sys
 import os
@@ -6,8 +6,7 @@ import time
 import random
 
 def get_word():
-    words = ['Apple']
-    #words = ['Apple','Bike','Python', 'Module', 'Variable']
+    words = ['Apple','Bike','Python', 'Module', 'Variable']
     return  random.choice(words).upper()
 
 
@@ -28,21 +27,37 @@ def find_indices(word, guess):
 def logic():
     turns = 0
     ass_lst = ['*'] * len(word)
-    while turns < 10:
+    word_solved = False
+    while turns < len(word)+3 and not '*' in word:
         guess =input('Guess a letter:').upper() 
         turns += 1
         failed = 0
-        #for guess in word:
         if guess in word:
             print ('Letter ' +str(guess) +' is in the word')
             for index in find_indices(word, guess):
                 ass_lst[index] = guess
-            print(ass_lst)
+            print(ass_lst) 
+            
         else:
             print ('Letter ' +str(guess) +' is not in the word')
             print(ass_lst)
-            
-           def main():
+
+    if '*' not in word:
+        word_solved=True
+        print('Congratulations! You have won!')
+        playagain()
+            #turns -=1
+            #print('You have '+str(turns)+' guesses left')
+ 
+
+def playagain():
+    play_again = input('Would you like to try again? [Yes/No] ').upper()
+    if play_again == 'TRUE':
+        main()
+    if play_again == 'NO':
+        print('Thank you for playing!')
+
+def main():
     numGuesses = 0
     guesses = []
 
@@ -57,18 +72,5 @@ print('*'*len(word))
 
 logic()
 
-   # if guess not in word:
-       # turns -=1
-       # print('Letter ' +str(guess)+  ' is not in the word')
-       # print('You have '+str(turns)+ ' more guesses')
-
-   # if turns ==0:
-       # prinf check(word,guesses,guess):
-    #status = ''
-    #match = 0
-    #for letter in word:
-        #if letter in guesses:
-            #status += letter
-       # else:
-           # status += "*"t("Try again next time!")
-
+#print('You are out of guesses!')
+#print('The word was ' +str(word))
