@@ -5,44 +5,42 @@ import os
 import time
 import random
 
+#ToDo create incorrect guess list
+#ToDo lookup enumeration and list comprehension
+
+
 def get_word():
     words = ['Apple','Bike','Python', 'Module', 'Variable', 'Syntax']
     return  random.choice(words).upper()
 
-def vowel_count(word):
+def word_count(word):
     vowels = ['A', 'E', 'I','O','U']
     vowelCount = 0
+    wordCount = 0
     for vowel in vowels:
         if vowel in word:
             vowelCount += 1
-    print('There are '+str(vowelCount)+' vowel(s) in the word')
 
-def word_count(word):
-    wordCount = 0
     for letter in word:
         wordCount+= 1
-    print('There are '+str(wordCount)+' letters in the word')
+    print('The word is '+str(wordCount)+' letters long and contains '+str(vowelCount)+' vowel(s)'+'\n')
 
 
-def find_indices(word, guess):
-    #ToDo look up enumeration & list comprehension 
+def find_indices(word, guess): 
     return [n for n, c in enumerate(word) if c == guess]
 
 
-def logic(word):
+def the_magic(word,won,lost):
     turns = len(word)+1
     alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     ass_lst = ['*'] * len(word)
-    word_solved = False
-    
+
     while turns >0:
         guess =input('Guess a letter:').upper() 
-        #turns -= 1
-        failed = 0
-        if len(guess) >1 or guess not in alphabet:
+        if len(guess) >1 or guess not in alphabet or guess == '':
+            print('\n'+'****Invalid Input!****')
             print('Please enter one letter at a time')
          
-
         if guess in ass_lst:
             print('You already guessed '+str(guess)+'! Please guess again')
             turns -= 1
@@ -53,58 +51,77 @@ def logic(word):
             print ('Letter ' +str(guess) +' is in the word')
             for index in find_indices(word, guess):
                 ass_lst[index] = guess
-            print(ass_lst)
+            print("".join(ass_lst))
             print('You have '+str(turns)+' guesses left'+'\n')
         
 
         else:
             print ('Letter ' +str(guess) +' is not in the word')
             turns -= 1
-            print(ass_lst)
+            print("".join(ass_lst))
             print('You have '+str(turns)+' guesses left'+'\n')
 
         if '*' not in ass_lst:
-            word_solved=True
-            print('Congratulations! You have won!')
-            break
+             print('Congratulations! You have won!')
+             won=+1
+             print(won) 
+             break
 
         elif turns == 0:
             print('Out of guesses!')
             hailmary = input('Try to guess the word: ').upper()
             if hailmary == word:
                 print('Congratulations! You guessed it')
+                won=+1
+                print(won)
+            
             else:
                 print('The word was: ' +word) 
+                lost +=1
                 break 
 
-def play_again():
-    playagain = input ('\nWould you like to play again? (y/n)').upper()
-    if playagain == 'Y' or playagain == 'YES':
-        main()
+#def you_won(won):
+    #print('Congratulations! You have won!')
+    #won +=1
+    #print(won)
+    #play_again()
+
+def play_again(play_count):
+    if play_count == 0:
+        return True
     else:
-        exit_game()
+        playagain = input ('\nWould you like to play again? (y/n)').upper()
+        if playagain == 'Y' or playagain == 'YES':
+            return True
+        else:
+            return False
 
 def welcome():
-    print('\n'+'*******Welcome to Guessman*******')
+    print('\n'+'***************Welcome to Guessman!**************')
     time.sleep(1)
-    print('******Selecting a word now******')
-    print('********************************')
-    print('*Game is Ready! Start guessing!*')
-    print('\n')
+    print('***************Selecting a word now**************')
+    print('*************************************************')
+    print('*********Game is Ready! Start guessing!**********'+'\n')
     time.sleep(1)
 
-def exit_game():
+def exit_game(won,lost):
     print('\n'+'Thank you for playing!')
-
-def main():    
-    welcome()
-    word = get_word()
-    word_count(word)
-    vowel_count(word)
-    logic(word)
-    play_again()
+    print('***************************')
+    print('******Final Score**********')
+    print('**Won '+str(won)+' games**')
+    print('**Lost '+str(lost)+' games**')
 
 
 if __name__ == '__main__':
-    main()
-
+    play_count=0
+    won = 0 
+    lost = 0
+    welcome()
+    while(play_again(play_count)):
+        play_count +=1
+        if play_count > 1:
+            print('\n'+'******Round '+str(play_count)+' of Guessman******'+'\n')
+        word = get_word()
+        word_count(word)
+        the_magic(word,won,lost)
+    exit_game(won,lost)
